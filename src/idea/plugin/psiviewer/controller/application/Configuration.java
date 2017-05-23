@@ -22,17 +22,15 @@
 
 package idea.plugin.psiviewer.controller.application;
 
+import javax.swing.JComponent;
+
 import com.intellij.openapi.options.BaseConfigurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent;
-import idea.plugin.psiviewer.util.Helpers;
 import idea.plugin.psiviewer.view.configuration.ConfigurationPanel;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class Configuration extends BaseConfigurable implements PsiViewerConstants {
     private ConfigurationPanel _panel;
@@ -64,12 +62,6 @@ public class Configuration extends BaseConfigurable implements PsiViewerConstant
         if (_panel.isPluginEnabled() ^ isPluginEnabled())
             return true;
 
-        if (!Helpers.encodeColor(_panel.getHighlightColor()).equals(settings.HIGHLIGHT_COLOR))
-            return true;
-
-        if (!Helpers.encodeColor(_panel.getReferenceHighlightColor()).equals(settings.REFERENCE_HIGHLIGHT_COLOR))
-            return true;
-
         return false;
     }
 
@@ -82,9 +74,6 @@ public class Configuration extends BaseConfigurable implements PsiViewerConstant
             enableToolWindows(_panel.isPluginEnabled());
 
         settings.PLUGIN_ENABLED = _panel.isPluginEnabled();
-        settings.HIGHLIGHT_COLOR = Helpers.encodeColor(_panel.getHighlightColor());
-        settings.REFERENCE_HIGHLIGHT_COLOR = Helpers.encodeColor(_panel.getReferenceHighlightColor());
-        settings.getTextAttributes().setBackgroundColor(getHighlightColor());
     }
 
     private static void enableToolWindows(boolean enableToolWindows) {
@@ -103,8 +92,6 @@ public class Configuration extends BaseConfigurable implements PsiViewerConstant
     @Override
     public void reset() {
         _panel.setPluginEnabled(isPluginEnabled());
-        _panel.setHighlightColor(getHighlightColor());
-        _panel.setReferenceHighlightColor(getReferenceHighlightColor());
     }
 
     @Override
@@ -114,14 +101,5 @@ public class Configuration extends BaseConfigurable implements PsiViewerConstant
 
     public boolean isPluginEnabled() {
         return settings.PLUGIN_ENABLED;
-    }
-
-    private Color getHighlightColor() {
-        return Helpers.parseColor(settings.HIGHLIGHT_COLOR);
-    }
-
-
-    public Color getReferenceHighlightColor() {
-        return Helpers.parseColor(settings.REFERENCE_HIGHLIGHT_COLOR);
     }
 }
