@@ -21,6 +21,21 @@
 */
 package idea.plugin.psiviewer.controller.project;
 
+import java.awt.BorderLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+import javax.swing.JPanel;
+
+import org.jdesktop.swingx.combobox.ListComboBoxModel;
+import org.jdom.Element;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -43,20 +58,6 @@ import idea.plugin.psiviewer.controller.actions.PropertyToggleAction;
 import idea.plugin.psiviewer.controller.application.PsiViewerApplicationSettings;
 import idea.plugin.psiviewer.util.Helpers;
 import idea.plugin.psiviewer.view.PsiViewerPanel;
-import org.jdesktop.swingx.combobox.ListComboBoxModel;
-import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternalizable, PsiViewerConstants {
 
@@ -64,7 +65,6 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
     public boolean HIGHLIGHT = false;
     public boolean FILTER_WHITESPACE = false;
     public boolean SHOW_PROPERTIES = true;
-    public int SPLIT_DIVIDER_POSITION = 300;
     public boolean AUTOSCROLL_TO_SOURCE = false;
     public boolean AUTOSCROLL_FROM_SOURCE = false;
 
@@ -272,16 +272,6 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
     {
         SHOW_PROPERTIES = showProperties;
         getViewerPanel().showProperties(showProperties);
-    }
-
-    public int getSplitDividerLocation()
-    {
-        return SPLIT_DIVIDER_POSITION;
-    }
-
-    public void setSplitDividerLocation(int location)
-    {
-        SPLIT_DIVIDER_POSITION = location;
     }
 
     public boolean isAutoScrollToSource()

@@ -32,7 +32,6 @@ import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.event.TreeSelectionEvent;
@@ -51,7 +50,8 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.OnePixelSplitter;
+import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import idea.plugin.psiviewer.PsiViewerConstants;
@@ -69,14 +69,14 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 	private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.view.PsiViewerPanel");
 
 	private String _actionTitle;
-	private PsiViewerTree _tree;
+	private PsiViewerTree myTree;
 	private PsiViewerTreeModel _model;
 	private PsiElement _rootElement; // The root element of the tree
 	private PsiElement _selectedElement; // The currently selected element in the tree
-	private PropertySheetPanel _propertyPanel;
+	private PropertySheetPanel myPropertyPanel;
 	private final Project _project;
 	private ToolWindow _toolWindow;
-	private JSplitPane _splitPane;
+	private OnePixelSplitter mySplitPane;
 	private final ViewerTreeSelectionListener _treeSelectionListener;
 	private final EditorCaretMover _caretMover;
 	private final EditorPsiElementHighlighter _highlighter;
@@ -117,36 +117,36 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 
 	private void resetTree()
 	{
-		_tree.getSelectionModel().removeTreeSelectionListener(_treeSelectionListener);
+		myTree.getSelectionModel().removeTreeSelectionListener(_treeSelectionListener);
 
 		Enumeration expandedDescendants = null;
 		TreePath path = null;
 		if(_model.getRoot() != null)
 		{
-			expandedDescendants = _tree.getExpandedDescendants(new TreePath(_model.getRoot()));
-			path = _tree.getSelectionModel().getSelectionPath();
+			expandedDescendants = myTree.getExpandedDescendants(new TreePath(_model.getRoot()));
+			path = myTree.getSelectionModel().getSelectionPath();
 		}
 
 		_model = new PsiViewerTreeModel(_projectComponent);
 		_model.setRoot(getRootElement());
-		_tree.setModel(_model);
+		myTree.setModel(_model);
 		if(expandedDescendants != null)
 		{
 			while(expandedDescendants.hasMoreElements())
 			{
 				TreePath treePath = (TreePath) expandedDescendants.nextElement();
-				_tree.expandPath(treePath);
+				myTree.expandPath(treePath);
 			}
 		}
-		_tree.setSelectionPath(path);
-		_tree.scrollPathToVisible(path);
+		myTree.setSelectionPath(path);
+		myTree.scrollPathToVisible(path);
 
-		_tree.getSelectionModel().addTreeSelectionListener(_treeSelectionListener);
+		myTree.getSelectionModel().addTreeSelectionListener(_treeSelectionListener);
 	}
 
 	public void showProperties(boolean showProperties)
 	{
-		_splitPane.getBottomComponent().setVisible(showProperties);
+		mySplitPane.getSecondComponent().setVisible(showProperties);
 		updatePropertySheet();
 	}
 
@@ -164,10 +164,11 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 	{
 		setLayout(new BorderLayout());
 
-		_tree = new PsiViewerTree(_model);
-		_tree.getSelectionModel().addTreeSelectionListener(_treeSelectionListener);
+		myTree = new PsiViewerTree(_model);
+		myTree.setBorder(null);
+		myTree.getSelectionModel().addTreeSelectionListener(_treeSelectionListener);
 
-		ActionMap actionMap = _tree.getActionMap();
+		ActionMap actionMap = myTree.getActionMap();
 		actionMap.put("EditSource", new AbstractAction("EditSource")
 		{
 			public void actionPerformed(ActionEvent e)
@@ -182,25 +183,17 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 				editor.getContentComponent().requestFocus();
 			}
 		});
-		InputMap inputMap = _tree.getInputMap();
+		InputMap inputMap = myTree.getInputMap();
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0, true), "EditSource");
 
-		_propertyPanel = new PropertySheetPanel();
+		myPropertyPanel = new PropertySheetPanel();
 
-		_splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, new JBScrollPane(_tree), _propertyPanel)
-		{
-			public void setDividerLocation(int location)
-			{
-				debug("Divider location changed to " + location + " component below " + (getRightComponent().isVisible() ? "visible" : "not visible"));
-				if(getRightComponent().isVisible())
-				{
-					_projectComponent.setSplitDividerLocation(location);
-				}
-				super.setDividerLocation(location);
-			}
-		};
-		_splitPane.setDividerLocation(_projectComponent.getSplitDividerLocation());
-		add(_splitPane);
+		mySplitPane = new OnePixelSplitter(true);
+		mySplitPane.setFirstComponent(ScrollPaneFactory.createScrollPane(myTree, true));
+		mySplitPane.setSecondComponent(myPropertyPanel);
+		mySplitPane.setAndLoadSplitterProportionKey("PsiViewerPanel.mySplitPane");
+
+		add(mySplitPane);
 	}
 
 	public void run()
@@ -211,7 +204,7 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 	{
 		public void valueChanged(TreeSelectionEvent e)
 		{
-			setSelectedElement((PsiElement) _tree.getLastSelectedPathComponent(), PsiViewerPanel.TREE_SELECTION_CHANGED);
+			setSelectedElement((PsiElement) myTree.getLastSelectedPathComponent(), PsiViewerPanel.TREE_SELECTION_CHANGED);
 		}
 	}
 
@@ -275,25 +268,20 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 		{
 			return;
 		}
-		_propertyPanel.setTarget(_selectedElement);
-		_propertyPanel.getTable().getTableHeader().setReorderingAllowed(false);
+		myPropertyPanel.setTarget(_selectedElement);
+		myPropertyPanel.getTable().getTableHeader().setReorderingAllowed(false);
 
 		_propertyHeaderRenderer.setIconForElement(_selectedElement);
-		_propertyPanel.getTable().getColumnModel().getColumn(0).setHeaderRenderer(_propertyHeaderRenderer);
-		_propertyPanel.getTable().getColumnModel().getColumn(1).setHeaderRenderer(_valueHeaderRenderer);
-
-		if(_selectedElement != null)
-		{
-			_splitPane.setDividerLocation(_projectComponent.getSplitDividerLocation());
-		}
+		myPropertyPanel.getTable().getColumnModel().getColumn(0).setHeaderRenderer(_propertyHeaderRenderer);
+		myPropertyPanel.getTable().getColumnModel().getColumn(1).setHeaderRenderer(_valueHeaderRenderer);
 	}
 
 	private void changeTreeSelection()
 	{
 		TreePath path = getPath(getSelectedElement());
-		_tree.expandPath(path);
-		_tree.scrollPathToVisible(path);
-		_tree.setSelectionPath(path);
+		myTree.expandPath(path);
+		myTree.scrollPathToVisible(path);
+		myTree.setSelectionPath(path);
 	}
 
 	private TreePath getPath(PsiElement element)

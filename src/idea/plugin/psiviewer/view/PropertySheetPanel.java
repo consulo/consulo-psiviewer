@@ -4,10 +4,8 @@
 package idea.plugin.psiviewer.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
-import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -28,7 +26,7 @@ import javax.swing.table.TableColumn;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.xml.util.XmlStringUtil;
 import idea.plugin.psiviewer.util.IntrospectionUtil;
 
@@ -40,21 +38,19 @@ import idea.plugin.psiviewer.util.IntrospectionUtil;
 public class PropertySheetPanel extends JPanel
 {
     private Object _target;
-    private JTable _table;
+    private JTable myTable;
 
     private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.view.PropertySheetPanel");
 
     public PropertySheetPanel()
     {
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
     }
 
     public void setTarget(Object bean)
     {
         debug("setTarget=" + bean);
-        setBackground(Color.WHITE);
         setVisible(false);
-        setLayout(new BorderLayout(0, 0));
         removeAll();
 
         _target = bean;
@@ -95,12 +91,12 @@ public class PropertySheetPanel extends JPanel
 
     public JTable getTable()
     {
-        return _table;
+        return myTable;
     }
 
     private JScrollPane createTable(Object[][] tableData, Object[] columnTitle)
     {
-        _table = new JTable(tableData, columnTitle)
+        myTable = new JTable(tableData, columnTitle)
         {
             public boolean isCellEditable(int row, int column)
             {
@@ -141,15 +137,15 @@ public class PropertySheetPanel extends JPanel
             }
 
 
-        }
-;
-        _table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-        _table.getSelectionModel().setSelectionMode(0);
+        };
 
-        packColumn(_table, 0, 2);
-        packColumn(_table, 1, 2);
+        myTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        myTable.getSelectionModel().setSelectionMode(0);
 
-        return new JBScrollPane(_table);
+        packColumn(myTable, 0, 2);
+        packColumn(myTable, 1, 2);
+
+        return ScrollPaneFactory.createScrollPane(myTable, true);
     }
 
     private void packColumn(JTable table, int colIndex, int margin)
