@@ -3,6 +3,7 @@
  */
 package idea.plugin.psiviewer.view;
 
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -19,6 +20,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiWhiteSpace;
+import consulo.annotations.RequiredReadAction;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent;
 import idea.plugin.psiviewer.util.PluginPsiUtil;
@@ -37,43 +39,30 @@ class EditorPsiElementHighlighter
 		_project = project;
 	}
 
-	void highlightElement(final PsiElement psiElement)
+	void highlightElement(@Nullable  PsiElement psiElement)
 	{
-		ApplicationManager.getApplication().runReadAction(new Runnable()
-		{
-			public void run()
-			{
-				apply(psiElement);
-			}
-		});
+		ApplicationManager.getApplication().runReadAction(() -> apply(psiElement));
 
-		if(psiElement.getReference() != null)
+		if(psiElement != null && psiElement.getReference() != null)
 		{
-			ApplicationManager.getApplication().runReadAction(new Runnable()
-			{
-				public void run()
-				{
-					applyReference(psiElement.getReference());
-				}
-			});
+			ApplicationManager.getApplication().runReadAction(() -> applyReference(psiElement.getReference()));
 		}
 	}
 
-
 	void removeHighlight()
 	{
-		ApplicationManager.getApplication().runReadAction(new Runnable()
-		{
-			public void run()
-			{
-				remove();
-			}
-		});
+		ApplicationManager.getApplication().runReadAction(this::remove);
 	}
 
-	private void apply(PsiElement element)
+	@RequiredReadAction
+	private void apply(@Nullable PsiElement element)
 	{
 		remove();
+
+		if(element == null)
+		{
+			return;
+		}
 
 		_editor = FileEditorManager.getInstance(_project).getSelectedTextEditor();
 		if(_editor == null)
@@ -98,6 +87,7 @@ class EditorPsiElementHighlighter
 		}
 	}
 
+	@RequiredReadAction
 	private void applyReference(PsiReference reference)
 	{
 		_editor = FileEditorManager.getInstance(_project).getSelectedTextEditor();
