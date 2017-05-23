@@ -22,17 +22,23 @@
 
 package idea.plugin.psiviewer.view;
 
-import com.intellij.psi.*;
-import com.intellij.psi.xml.*;
-import idea.plugin.psiviewer.PsiViewerConstants;
+import java.awt.Component;
 
-import javax.swing.*;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.*;
+
+import com.intellij.psi.PsiBinaryFile;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiPlainTextFile;
+import com.intellij.psi.PsiWhiteSpace;
+import idea.plugin.psiviewer.PsiViewerConstants;
 
 class PsiViewerTreeCellRenderer extends DefaultTreeCellRenderer implements PsiViewerConstants {
     private final ElementVisitor _elementVisitor = new ElementVisitor();
-    private final XmlElementVisitor _elementVisitorXml = new ElementVisitorXml();
 
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean isSelected, boolean isExpanded,
                                                   boolean isLeaf, int row, boolean hasFocus) {
@@ -42,7 +48,6 @@ class PsiViewerTreeCellRenderer extends DefaultTreeCellRenderer implements PsiVi
         PsiElement psiElement = (PsiElement) value;
 
         psiElement.accept(_elementVisitor);
-        psiElement.accept(_elementVisitorXml);
 
 //        try {
 //            psiElement.accept(new PsiViewerTreeCellJavaElementVisitor(this));
@@ -108,53 +113,4 @@ class PsiViewerTreeCellRenderer extends DefaultTreeCellRenderer implements PsiVi
         private ElementVisitor() {
         }
     }
-
-
-
-    private class ElementVisitorXml extends XmlElementVisitor {
-        public void visitXmlAttribute(XmlAttribute psiElement) {
-            setIcon(IconCache.getIcon(XmlAttribute.class));
-            setText("XmlAttribute: " + psiElement.getName());
-        }
-
-        public void visitXmlAttributeValue(XmlAttributeValue psiElement) {
-            setText("XmlAttributeValue");
-        }
-
-        public void visitXmlComment(XmlComment psiElement) {
-            setIcon(IconCache.getIcon(XmlComment.class));
-            setText("XmlComment");
-        }
-
-        public void visitXmlDecl(XmlDecl psiElement) {
-            setText("XmlDecl");
-        }
-
-        public void visitXmlDoctype(XmlDoctype psiElement) {
-            setText("XmlDoctype");
-        }
-
-        public void visitXmlDocument(XmlDocument psiElement) {
-            setText("XmlDocument");
-        }
-
-        public void visitXmlFile(XmlFile psiElement) {
-            setIcon(IconCache.getIcon(XmlFile.class));
-            setText("XmlFile: " + psiElement.getName());
-        }
-
-        public void visitXmlProlog(XmlProlog psiElement) {
-            setText("XmlProlog");
-        }
-
-        public void visitXmlTag(XmlTag psiElement) {
-            setIcon(IconCache.getIcon(XmlTag.class));
-            setText("XmlTag: " + psiElement.getName());
-        }
-
-        public void visitXmlToken(XmlToken psiElement) {
-            setText("XmlToken: " + psiElement.getText());
-        }
-    }
-
 }

@@ -3,3 +3,6 @@ out
 .idea
 psiviewer.jar
 build.properties
+
+.consulo/workspace.xml
+.consulo/sandbox

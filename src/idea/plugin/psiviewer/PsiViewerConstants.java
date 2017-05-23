@@ -39,9 +39,6 @@ public interface PsiViewerConstants
     String ICON_TOGGLE_HIGHLIGHT = "/images/highlighter.png";
     String ICON_SHOW_PROPERTIES = "/objectBrowser/showStructure.png";
     String ICON_COMMENT = "/images/comment.png";
-    String ICON_XML_TAG = "/images/xmlTag.png";
-    String ICON_XML_ATTRIBUTE = "/images/xmlAttribute.png";
-    String ICON_XML_COMMENT = "/images/xmlComment.png";
 
     // Ids
     String ID_TOOL_WINDOW = "PsiViewer";

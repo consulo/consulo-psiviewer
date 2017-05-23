@@ -3,23 +3,34 @@
  */
 package idea.plugin.psiviewer.view;
 
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.table.JBTable;
-import com.intellij.xml.util.XmlStringUtil;
-import com.intellij.xml.util.XmlUtil;
-import idea.plugin.psiviewer.util.IntrospectionUtil;
-
-import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyDescriptor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JToolTip;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.ui.components.JBScrollPane;
+import com.intellij.xml.util.XmlStringUtil;
+import idea.plugin.psiviewer.util.IntrospectionUtil;
 
 /**
  * A property sheet describing the selected PSI element.
@@ -62,7 +73,7 @@ public class PropertySheetPanel extends JPanel
 
             if(StringUtil.isNotEmpty(value) && StringUtil.startsWithIgnoreCase(value, "<html>"))
             {
-                value = "<html>" + XmlUtil.escape(value) + "</html>";
+                value = "<html>" + XmlStringUtil.escapeString(value) + "</html>";
             }
 
             map.put(key, value);

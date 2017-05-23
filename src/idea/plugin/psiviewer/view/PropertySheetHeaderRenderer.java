@@ -22,116 +22,95 @@
 
 package idea.plugin.psiviewer.view;
 
-import com.intellij.psi.*;
-import com.intellij.psi.xml.*;
-import idea.plugin.psiviewer.PsiViewerConstants;
+import java.awt.Component;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
 
-class PropertySheetHeaderRenderer extends JLabel implements TableCellRenderer, PsiViewerConstants {
-    private final ElementVisitor _elementVisitor = new ElementVisitor();
-    private final XmlElementVisitor _elementVisitorXml = new ElementVisitorXml();
+import com.intellij.psi.PsiBinaryFile;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiPlainTextFile;
+import com.intellij.psi.PsiWhiteSpace;
+import idea.plugin.psiviewer.PsiViewerConstants;
 
-    public PropertySheetHeaderRenderer() {
-        super();
-    }
+class PropertySheetHeaderRenderer extends JLabel implements TableCellRenderer, PsiViewerConstants
+{
+	private final ElementVisitor _elementVisitor = new ElementVisitor();
 
-    public PropertySheetHeaderRenderer(Icon image) {
-        super(image);
-    }
+	public PropertySheetHeaderRenderer()
+	{
+		super();
+	}
 
-    public PropertySheetHeaderRenderer(Icon image, int horizontalAlignment) {
-        super(image, horizontalAlignment);
-    }
+	public PropertySheetHeaderRenderer(Icon image)
+	{
+		super(image);
+	}
 
-    public PropertySheetHeaderRenderer(Icon image, int horizontalAlignment, Border border) {
-        super(image, horizontalAlignment);
-        setBorder(border);
-    }
+	public PropertySheetHeaderRenderer(Icon image, int horizontalAlignment)
+	{
+		super(image, horizontalAlignment);
+	}
 
-    public Component getTableCellRendererComponent(JTable table,
-                                                   Object value,
-                                                   boolean isSelected,
-                                                   boolean hasFocus,
-                                                   int row,
-                                                   int column) {
-        setText(value.toString());
-        return this;
-    }
+	public PropertySheetHeaderRenderer(Icon image, int horizontalAlignment, Border border)
+	{
+		super(image, horizontalAlignment);
+		setBorder(border);
+	}
 
-    public void setIconForElement(PsiElement psiElement) {
-        setIcon(IconCache.DEFAULT_ICON);
-        if (psiElement == null)
-            return;
-        psiElement.accept(_elementVisitor);
-        psiElement.accept(_elementVisitorXml);
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+	{
+		setText(value.toString());
+		return this;
+	}
 
-//        try {
-//            psiElement.accept(new PropertySheetJavaElementVisitor(this));
-//        } catch (Exception e) {
-//        }
-    }
+	public void setIconForElement(PsiElement psiElement)
+	{
+		setIcon(IconCache.DEFAULT_ICON);
+		if(psiElement == null)
+		{
+			return;
+		}
+		psiElement.accept(_elementVisitor);
 
-    private class ElementVisitor extends PsiElementVisitor {
-        public void visitBinaryFile(PsiBinaryFile psiElement) {
-            setIcon(IconCache.getIcon(PsiBinaryFile.class));
-        }
+		//        try {
+		//            psiElement.accept(new PropertySheetJavaElementVisitor(this));
+		//        } catch (Exception e) {
+		//        }
+	}
 
-        public void visitComment(PsiComment psiElement) {
-            setIcon(IconCache.getIcon(PsiComment.class));
-        }
+	private class ElementVisitor extends PsiElementVisitor
+	{
+		public void visitBinaryFile(PsiBinaryFile psiElement)
+		{
+			setIcon(IconCache.getIcon(PsiBinaryFile.class));
+		}
 
-        public void visitDirectory(PsiDirectory psiElement) {
-            setIcon(IconCache.getIcon(PsiDirectory.class));
-        }
+		public void visitComment(PsiComment psiElement)
+		{
+			setIcon(IconCache.getIcon(PsiComment.class));
+		}
 
-        public void visitPlainTextFile(PsiPlainTextFile psiElement) {
-            setIcon(IconCache.getIcon(PsiPlainTextFile.class));
-        }
+		public void visitDirectory(PsiDirectory psiElement)
+		{
+			setIcon(IconCache.getIcon(PsiDirectory.class));
+		}
 
-        public void visitWhiteSpace(PsiWhiteSpace psiElement) {
-            setIcon(IconCache.getIcon(PsiWhiteSpace.class));
-        }
-    }
+		public void visitPlainTextFile(PsiPlainTextFile psiElement)
+		{
+			setIcon(IconCache.getIcon(PsiPlainTextFile.class));
+		}
 
-    private class ElementVisitorXml extends XmlElementVisitor {
-        public void visitXmlAttribute(XmlAttribute psiElement) {
-            setIcon(IconCache.getIcon(XmlAttribute.class));
-        }
-
-        public void visitXmlComment(XmlComment psiElement) {
-            setIcon(IconCache.getIcon(XmlComment.class));
-        }
-
-        public void visitXmlFile(XmlFile psiElement) {
-            setIcon(IconCache.getIcon(XmlFile.class));
-        }
-
-        public void visitXmlTag(XmlTag psiElement) {
-            setIcon(IconCache.getIcon(XmlTag.class));
-        }
-
-        public void visitXmlAttributeValue(XmlAttributeValue psiElement) {
-        }
-
-        public void visitXmlDecl(XmlDecl psiElement) {
-        }
-
-        public void visitXmlDoctype(XmlDoctype psiElement) {
-        }
-
-        public void visitXmlDocument(XmlDocument psiElement) {
-        }
-        
-        public void visitXmlProlog(XmlProlog psiElement) {
-        }
-
-        public void visitXmlToken(XmlToken psiElement) {
-        }
-    }
-
+		public void visitWhiteSpace(PsiWhiteSpace psiElement)
+		{
+			setIcon(IconCache.getIcon(PsiWhiteSpace.class));
+		}
+	}
 }
 
