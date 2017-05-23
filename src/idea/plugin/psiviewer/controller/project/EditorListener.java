@@ -21,6 +21,8 @@
 */
 package idea.plugin.psiviewer.controller.project;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -39,7 +41,6 @@ import com.intellij.psi.PsiTreeChangeEvent;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.messages.MessageBusConnection;
 import idea.plugin.psiviewer.view.PsiViewerPanel;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author <a href="mailto:andrew_armstrong@bigpond.com">Andrew Armstrong</a>
@@ -53,6 +54,7 @@ public class EditorListener extends CaretAdapter implements FileEditorManagerLis
     private final PsiViewerPanel _viewer;
     private final Project _project;
     private final PsiTreeChangeAdapter _treeChangeListener;
+    @Nullable
     private Editor _currentEditor;
     private MessageBusConnection _msgbus;
 
@@ -125,7 +127,7 @@ public class EditorListener extends CaretAdapter implements FileEditorManagerLis
 
         Editor newEditor = event.getManager().getSelectedTextEditor();
 
-        if (_currentEditor != newEditor) _currentEditor.getCaretModel().removeCaretListener(this);
+        if (_currentEditor != newEditor && _currentEditor != null) _currentEditor.getCaretModel().removeCaretListener(this);
 
         _viewer.selectElementAtCaret();
 
