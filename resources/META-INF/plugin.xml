@@ -5,19 +5,6 @@
 	<description>A Program Structure Interface (PSI) tree viewer. This plugin may be useful for developers who are considering using the PSI interface in their own plugins.</description>
 	<version>SNAPSHOT</version>
 	<vendor>Andrew Armstrong, Bas Leijdekkers, Vince Mallet, Ole Matzura, Jacques Morel, Colin Fleming, Jon Akhtar</vendor>
-	<change-notes><![CDATA[<html><ul>
-
-    <li>Fixed some longtime annoyances. The cursor doesn't jump around anymore</li>
-
-    <li>Leaf nodes which are not children of the psi tree are filtered from the selection</li>
-
-    <li>Support for all JetBrains IDEs</li>
-
-    <li>Fixed the toolwindow icons</li>
-
-</ul>
-
-</html>]]></change-notes>
 
 	<project-components>
 		<component>
