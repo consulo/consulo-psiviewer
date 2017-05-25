@@ -44,7 +44,7 @@ public class PropertySheetPanel extends JPanel
 
     public PropertySheetPanel()
     {
-        setLayout(new BorderLayout());
+        super(new BorderLayout());
     }
 
     public void setTarget(Object bean)
@@ -86,7 +86,6 @@ public class PropertySheetPanel extends JPanel
 
         add(createTable(tableData, columnTitles));
         setVisible(true);
-
     }
 
     public JTable getTable()
