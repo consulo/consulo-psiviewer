@@ -187,6 +187,7 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0, true), "EditSource");
 
 		myPropertyPanel = new PropertySheetPanel();
+		myPropertyPanel.setVisible(false);
 
 		mySplitPane = new OnePixelSplitter(true);
 		mySplitPane.setFirstComponent(ScrollPaneFactory.createScrollPane(myTree, true));
