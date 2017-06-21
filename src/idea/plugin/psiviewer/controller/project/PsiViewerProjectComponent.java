@@ -53,6 +53,8 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.components.panels.HorizontalLayout;
+import com.intellij.ui.content.ContentFactory;
+import com.intellij.ui.content.ContentManager;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.actions.PropertyToggleAction;
 import idea.plugin.psiviewer.controller.application.PsiViewerApplicationSettings;
@@ -77,19 +79,19 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 		{
 			if(e.getStateChange() == ItemEvent.SELECTED)
 			{
-				_viewerPanel.refreshRootElement();
-				_viewerPanel.selectElementAtCaret();
+				myViewerPanel.refreshRootElement();
+				myViewerPanel.selectElementAtCaret();
 			}
 		}
 	};
 
-	private final Project _project;
+	private final Project myProject;
 	private EditorListener _editorListener;
-	private PsiViewerPanel _viewerPanel;
+	private PsiViewerPanel myViewerPanel;
 
 	public PsiViewerProjectComponent(Project project)
 	{
-		_project = project;
+		myProject = project;
 	}
 
 	public void projectOpened()
@@ -121,9 +123,9 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 
 	public void initToolWindow()
 	{
-		_viewerPanel = new PsiViewerPanel(this);
+		myViewerPanel = new PsiViewerPanel(this);
 
-		_viewerPanel.addPropertyChangeListener("ancestor", new PropertyChangeListener()
+		myViewerPanel.addPropertyChangeListener("ancestor", new PropertyChangeListener()
 		{
 			public void propertyChange(PropertyChangeEvent evt)
 			{
@@ -148,40 +150,40 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 		panel.add(myLanguagesComboBox);
 		updateLanguagesList(Collections.<Language>emptyList());
 
-		_viewerPanel.add(panel, BorderLayout.NORTH);
+		myViewerPanel.add(panel, BorderLayout.NORTH);
 
 		ToolWindow toolWindow = getToolWindow();
 		toolWindow.setIcon(Helpers.getIcon(ICON_TOOL_WINDOW));
-		_viewerPanel.setToolWindow(toolWindow);
+		myViewerPanel.setToolWindow(toolWindow);
 
-		_editorListener = new EditorListener(_viewerPanel, _project);
+		_editorListener = new EditorListener(myViewerPanel, myProject);
 	}
 
 	private void handleCurrentState()
 	{
-		if(_viewerPanel == null)
+		if(myViewerPanel == null)
 		{
 			return;
 		}
 
-		if(_viewerPanel.isDisplayable())
+		if(myViewerPanel.isDisplayable())
 		{
 			_editorListener.start();
-			_viewerPanel.selectElementAtCaret();
+			myViewerPanel.selectElementAtCaret();
 		}
 		else
 		{
 			_editorListener.stop();
-			_viewerPanel.removeHighlighting();
+			myViewerPanel.removeHighlighting();
 		}
 	}
 
 	public void unregisterToolWindow()
 	{
-		if(_viewerPanel != null)
+		if(myViewerPanel != null)
 		{
-			_viewerPanel.removeHighlighting();
-			_viewerPanel = null;
+			myViewerPanel.removeHighlighting();
+			myViewerPanel = null;
 		}
 
 		if(_editorListener != null)
@@ -191,26 +193,29 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 		}
 		if(isToolWindowRegistered())
 		{
-			ToolWindowManager.getInstance(_project).unregisterToolWindow(ID_TOOL_WINDOW);
+			ToolWindowManager.getInstance(myProject).unregisterToolWindow(ID_TOOL_WINDOW);
 		}
 	}
 
 	private ToolWindow getToolWindow()
 	{
-		ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(_project);
+		ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(myProject);
 		if(isToolWindowRegistered())
 		{
 			return toolWindowManager.getToolWindow(ID_TOOL_WINDOW);
 		}
 		else
 		{
-			return toolWindowManager.registerToolWindow(ID_TOOL_WINDOW, _viewerPanel, ToolWindowAnchor.RIGHT);
+			ToolWindow toolWindow = toolWindowManager.registerToolWindow(ID_TOOL_WINDOW, false, ToolWindowAnchor.RIGHT, myProject, true);
+			ContentManager contentManager = toolWindow.getContentManager();
+			contentManager.addContent(ContentFactory.SERVICE.getInstance().createContent(myViewerPanel, null, false));
+			return toolWindow;
 		}
 	}
 
 	private boolean isToolWindowRegistered()
 	{
-		return ToolWindowManager.getInstance(_project).getToolWindow(ID_TOOL_WINDOW) != null;
+		return ToolWindowManager.getInstance(myProject).getToolWindow(ID_TOOL_WINDOW) != null;
 	}
 
 	public void readExternal(Element element) throws InvalidDataException
@@ -225,7 +230,7 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 
 	public PsiViewerPanel getViewerPanel()
 	{
-		return _viewerPanel;
+		return myViewerPanel;
 	}
 
 	public boolean isHighlighted()
@@ -237,7 +242,7 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 	{
 		debug("set highlight to " + highlight);
 		HIGHLIGHT = highlight;
-		_viewerPanel.applyHighlighting();
+		myViewerPanel.applyHighlighting();
 
 	}
 
@@ -287,7 +292,7 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 
 	public Project getProject()
 	{
-		return _project;
+		return myProject;
 	}
 
 	public static PsiViewerProjectComponent getInstance(Project project)
