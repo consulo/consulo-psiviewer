@@ -1,13 +1,13 @@
 package idea.plugin.psiviewer.controller.actions;
 
+import java.awt.datatransfer.StringSelection;
+
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.DebugUtil;
-
-import java.awt.datatransfer.StringSelection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -40,7 +40,7 @@ public class PsiDump extends AnAction {
   }
 
   protected static PsiFile getFile(AnActionEvent e) {
-    return LangDataKeys.PSI_FILE.getData(e.getDataContext());
+    return e.getData(LangDataKeys.PSI_FILE);
   }
 
   @Override
