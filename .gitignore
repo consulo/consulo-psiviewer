@@ -1,8 +1,4 @@
-PsiViewer.iws
-out
-.idea
-psiviewer.jar
-build.properties
-
-.consulo/workspace.xml
-.consulo/sandbox
+/.consulo
+!/.consulo/codeStyleSettings.xml
+/out
+/target
