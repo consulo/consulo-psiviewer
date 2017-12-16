@@ -3,11 +3,11 @@
  */
 package idea.plugin.psiviewer.view;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
-import javax.swing.*;
+import javax.swing.JFrame;
 import javax.swing.table.TableModel;
+
+import org.junit.Assert;
+import junit.framework.TestCase;
 
 public class PropertySheetPanelTest extends TestCase
 {
