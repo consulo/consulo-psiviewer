@@ -32,7 +32,6 @@ import java.util.Collections;
 
 import javax.swing.JPanel;
 
-import org.jdesktop.swingx.combobox.ListComboBoxModel;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,6 +51,7 @@ import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.ui.CollectionComboBoxModel;
 import com.intellij.ui.components.panels.HorizontalLayout;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.ui.content.ContentManager;
@@ -320,8 +320,7 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 
 		myLanguagesComboBox.removeItemListener(myLanguagesComboBoxListener);
 
-		//noinspection Since15
-		myLanguagesComboBox.setModel(new ListComboBoxModel<Language>(new ArrayList<Language>(languages)));
+		myLanguagesComboBox.setModel(new CollectionComboBoxModel<>(new ArrayList<>(languages)));
 
 		if(selectedLanguage != null && languages.contains(selectedLanguage))
 		{
