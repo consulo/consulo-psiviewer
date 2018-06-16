@@ -21,8 +21,9 @@
 */
 package idea.plugin.psiviewer.controller.project;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -62,27 +63,27 @@ public class EditorListener extends CaretAdapter implements FileEditorManagerLis
         _viewer = viewer;
         _project = project;
         _treeChangeListener = new PsiTreeChangeAdapter() {
-            public void childrenChanged(@NotNull final PsiTreeChangeEvent event) {
+            public void childrenChanged(@Nonnull final PsiTreeChangeEvent event) {
                 updateTreeFromPsiTreeChange(event);
             }
 
-            public void childAdded(@NotNull PsiTreeChangeEvent event) {
+            public void childAdded(@Nonnull PsiTreeChangeEvent event) {
                 updateTreeFromPsiTreeChange(event);
             }
 
-            public void childMoved(@NotNull PsiTreeChangeEvent event) {
+            public void childMoved(@Nonnull PsiTreeChangeEvent event) {
                 updateTreeFromPsiTreeChange(event);
             }
 
-            public void childRemoved(@NotNull PsiTreeChangeEvent event) {
+            public void childRemoved(@Nonnull PsiTreeChangeEvent event) {
                 updateTreeFromPsiTreeChange(event);
             }
 
-            public void childReplaced(@NotNull PsiTreeChangeEvent event) {
+            public void childReplaced(@Nonnull PsiTreeChangeEvent event) {
                 updateTreeFromPsiTreeChange(event);
             }
 
-            public void propertyChanged(@NotNull PsiTreeChangeEvent event) {
+            public void propertyChanged(@Nonnull PsiTreeChangeEvent event) {
                 updateTreeFromPsiTreeChange(event);
             }
         };
@@ -112,15 +113,15 @@ public class EditorListener extends CaretAdapter implements FileEditorManagerLis
         return b;
     }
 
-    public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
+    public void fileOpened(@Nonnull FileEditorManager source, @Nonnull VirtualFile file) {
         debug("source = [" + source + "], file = [" + file + "]");
     }
 
-    public void fileClosed(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
+    public void fileClosed(@Nonnull FileEditorManager source, @Nonnull VirtualFile file) {
         debug("source = [" + source + "], file = [" + file + "]");
     }
 
-    public void selectionChanged(@NotNull FileEditorManagerEvent event) {
+    public void selectionChanged(@Nonnull FileEditorManagerEvent event) {
         debug("selection changed " + event.toString());
 
         if (event.getNewFile() == null) return;

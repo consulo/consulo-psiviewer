@@ -30,11 +30,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JPanel;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.intellij.icons.AllIcons;
 import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.ActionManager;
@@ -63,7 +63,6 @@ import idea.plugin.psiviewer.view.PsiViewerPanel;
 
 public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternalizable, PsiViewerConstants
 {
-
 	private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent");
 	public boolean HIGHLIGHT = false;
 	public boolean FILTER_WHITESPACE = false;
@@ -115,7 +114,7 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 	{
 	}
 
-	@NotNull
+	@Nonnull
 	public String getComponentName()
 	{
 		return PLUGIN_NAME + '.' + PROJECT_COMPONENT_NAME;
@@ -243,7 +242,6 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 		debug("set highlight to " + highlight);
 		HIGHLIGHT = highlight;
 		myViewerPanel.applyHighlighting();
-
 	}
 
 	public boolean isFilterWhitespace()
