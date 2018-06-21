@@ -21,98 +21,92 @@
 */
 package idea.plugin.psiviewer.util;
 
-import com.intellij.openapi.diagnostic.Logger;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
-import java.net.MalformedURLException;
-import java.net.URL;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
+import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.IconLoader;
 
 public final class Helpers
 {
-    private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.Helpers");
-    private static final Icon DEFAULT_ICON = getDefaultIcon();
+	private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.Helpers");
+	private static final Icon DEFAULT_ICON = getDefaultIcon();
 
-    /**
-     * Gets an icon either via the class loader, or from a url (maybe a file). <p> To keep the peace, it will always
-     * return <i>some</i> sort of icon even if it has to build one on-the-fly.
-     *
-     * @param path
-     * @return An Icon almost guaranteed to be usable.
-     */
-    public static Icon getIcon(String path)
-    {
-        URL url = Helpers.class.getResource(path);      // pull icon from jar first
-        if (url == null)
-        {
-            try
-            {
-                url = new URL(path);    // now try from a url
-            }
-            catch (MalformedURLException e)
-            {
-                LOG.debug("Could not find icon " + path);
-                return DEFAULT_ICON;
-            }
-        }
+	/**
+	 * Gets an icon either via the class loader, or from a url (maybe a file). <p> To keep the peace, it will always
+	 * return <i>some</i> sort of icon even if it has to build one on-the-fly.
+	 *
+	 * @param path
+	 * @return An Icon almost guaranteed to be usable.
+	 */
+	public static Icon getIcon(String path)
+	{
+		return IconLoader.findIcon(path, Helpers.class);
+	}
 
-        Icon icon = new ImageIcon(url);
-        if (icon.getIconWidth() < 0 || icon.getIconHeight() < 0)
-        {
-            LOG.debug("Bad icon data " + path);
-            return DEFAULT_ICON;
-        }
+	private static Icon getDefaultIcon()
+	{
+		BufferedImage bi = new BufferedImage(18, 18, BufferedImage.TYPE_INT_ARGB_PRE);
+		Graphics2D g2 = bi.createGraphics();
+		g2.setBackground(Color.red);
+		g2.clearRect(0, 0, bi.getWidth(), bi.getHeight());
+		g2.setColor(Color.white);
+		g2.setStroke(new BasicStroke(2));
+		GeneralPath x = new GeneralPath();
+		x.moveTo(0, 0);
+		x.lineTo(bi.getWidth() - 1, bi.getHeight() - 1);
+		x.moveTo(0, bi.getHeight() - 1);
+		x.lineTo(bi.getWidth() - 1, 0);
+		g2.draw(x);
+		return new ImageIcon(bi);
+	}
 
-        return icon;
-    }
+	public static Color parseColor(String rgba)
+	{
+		int red = 0, green = 0, blue = 0, alpha = 128;
+		String token[] = rgba.split(" ");
+		if(token.length > 0)
+		{
+			red = getSample(token[0]);
+		}
+		if(token.length > 1)
+		{
+			green = getSample(token[1]);
+		}
+		if(token.length > 2)
+		{
+			blue = getSample(token[2]);
+		}
+		if(token.length > 3)
+		{
+			alpha = getSample(token[3]);
+		}
+		return new Color(red, green, blue, alpha);
+	}
 
-    private static Icon getDefaultIcon()
-    {
-        BufferedImage bi = new BufferedImage(18, 18, BufferedImage.TYPE_INT_ARGB_PRE);
-        Graphics2D g2 = bi.createGraphics();
-        g2.setBackground(Color.red);
-        g2.clearRect(0, 0, bi.getWidth(), bi.getHeight());
-        g2.setColor(Color.white);
-        g2.setStroke(new BasicStroke(2));
-        GeneralPath x = new GeneralPath();
-        x.moveTo(0, 0);
-        x.lineTo(bi.getWidth() - 1, bi.getHeight() - 1);
-        x.moveTo(0, bi.getHeight() - 1);
-        x.lineTo(bi.getWidth() - 1, 0);
-        g2.draw(x);
-        return new ImageIcon(bi);
-    }
+	private static int getSample(String sample)
+	{
+		int s;
+		try
+		{
+			s = Math.min(Math.abs(Integer.valueOf(sample).intValue()), 255);
+		}
+		catch(NumberFormatException e)
+		{
+			s = 0;
+		}
+		return s;
+	}
 
-    public static Color parseColor(String rgba)
-    {
-        int red = 0, green = 0, blue = 0, alpha = 128;
-        String token[] = rgba.split(" ");
-        if (token.length > 0) red = getSample(token[0]);
-        if (token.length > 1) green = getSample(token[1]);
-        if (token.length > 2) blue = getSample(token[2]);
-        if (token.length > 3) alpha = getSample(token[3]);
-        return new Color(red, green, blue, alpha);
-    }
-
-    private static int getSample(String sample)
-    {
-        int s;
-        try
-        {
-            s = Math.min(Math.abs(Integer.valueOf(sample).intValue()), 255);
-        }
-        catch (NumberFormatException e)
-        {
-            s = 0;
-        }
-        return s;
-    }
-
-    public static String encodeColor(Color color)
-    {
-        return color.getRed() + " " + color.getGreen() + " " + color.getBlue() + " " + color.getAlpha();
-    }
+	public static String encodeColor(Color color)
+	{
+		return color.getRed() + " " + color.getGreen() + " " + color.getBlue() + " " + color.getAlpha();
+	}
 
 }

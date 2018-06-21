@@ -45,6 +45,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
 import com.intellij.openapi.util.WriteExternalException;
@@ -152,7 +153,7 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 		myViewerPanel.add(panel, BorderLayout.NORTH);
 
 		ToolWindow toolWindow = getToolWindow();
-		toolWindow.setIcon(Helpers.getIcon(ICON_TOOL_WINDOW));
+		toolWindow.setIcon(IconLoader.findIcon(ICON_TOOL_WINDOW, PsiViewerProjectComponent.class));
 		myViewerPanel.setToolWindow(toolWindow);
 
 		_editorListener = new EditorListener(myViewerPanel, myProject);
