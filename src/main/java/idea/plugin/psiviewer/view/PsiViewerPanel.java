@@ -21,30 +21,13 @@
 */
 package idea.plugin.psiviewer.view;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.Enumeration;
-import java.util.LinkedList;
-
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
-import javax.swing.InputMap;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
-
-import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
@@ -58,6 +41,18 @@ import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent;
 import idea.plugin.psiviewer.model.PsiViewerTreeModel;
 import idea.plugin.psiviewer.util.Helpers;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import java.util.LinkedList;
 
 /**
  * A JPanel that holds a toolbar, a tree view, and a property sheet.
@@ -75,7 +70,6 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 	private PsiElement _selectedElement; // The currently selected element in the tree
 	private PropertySheetPanel myPropertyPanel;
 	private final Project _project;
-	private ToolWindow _toolWindow;
 	private OnePixelSplitter mySplitPane;
 	private final ViewerTreeSelectionListener _treeSelectionListener;
 	private final EditorCaretMover _caretMover;
@@ -150,14 +144,10 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 		updatePropertySheet();
 	}
 
+	@Nonnull
 	private ToolWindow getToolWindow()
 	{
-		return _toolWindow;
-	}
-
-	public void setToolWindow(ToolWindow toolWindow)
-	{
-		_toolWindow = toolWindow;
+		return ToolWindowManager.getInstance(_project).getToolWindow(ID_TOOL_WINDOW);
 	}
 
 	private void buildGUI()

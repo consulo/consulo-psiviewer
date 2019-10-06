@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<idea-plugin>
+<consulo-plugin>
 	<id>consulo.psiviewer</id>
 	<name>PsiViewer</name>
 	<description>A Program Structure Interface (PSI) tree viewer. This plugin may be useful for developers who are considering using the PSI interface in their own plugins.</description>
 	<version>SNAPSHOT</version>
 	<vendor>Andrew Armstrong, Bas Leijdekkers, Vince Mallet, Ole Matzura, Jacques Morel, Colin Fleming, Jon Akhtar</vendor>
 
-	<project-components>
-		<component>
-			<implementation-class>idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent</implementation-class>
-			<option name="workspace" value="true"/>
-		</component>
-	</project-components>
-
-	<!-- Extensions -->
 	<extensions defaultExtensionNs="com.intellij">
-		<applicationService serviceImplementation="idea.plugin.psiviewer.controller.application.PsiViewerApplicationSettings"/>
+		<projectService serviceImplementation="idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent" />
+
+		<toolWindow id="PsiViewer" icon="/images/psiToolWindow.png" anchor="right" factoryClass="consulo.psiviewer.toolWindow.PsiViewerToolwindowFactory" />
 	</extensions>
 
 	<!-- Component's actions -->
@@ -58,6 +52,5 @@
 			<add-to-group anchor="last" group-id="ProjectViewPopupMenu"/>
 			<add-to-group anchor="last" group-id="StructureViewPopupMenu"/>
 		</group>
-
 	</actions>
-</idea-plugin>
+</consulo-plugin>

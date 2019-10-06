@@ -21,23 +21,13 @@
 */
 package idea.plugin.psiviewer.util;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.GeneralPath;
-import java.awt.image.BufferedImage;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.IconLoader;
+
+import javax.swing.*;
+import java.awt.*;
 
 public final class Helpers
 {
-	private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.Helpers");
-	private static final Icon DEFAULT_ICON = getDefaultIcon();
-
 	/**
 	 * Gets an icon either via the class loader, or from a url (maybe a file). <p> To keep the peace, it will always
 	 * return <i>some</i> sort of icon even if it has to build one on-the-fly.
@@ -50,22 +40,6 @@ public final class Helpers
 		return IconLoader.findIcon(path, Helpers.class);
 	}
 
-	private static Icon getDefaultIcon()
-	{
-		BufferedImage bi = new BufferedImage(18, 18, BufferedImage.TYPE_INT_ARGB_PRE);
-		Graphics2D g2 = bi.createGraphics();
-		g2.setBackground(Color.red);
-		g2.clearRect(0, 0, bi.getWidth(), bi.getHeight());
-		g2.setColor(Color.white);
-		g2.setStroke(new BasicStroke(2));
-		GeneralPath x = new GeneralPath();
-		x.moveTo(0, 0);
-		x.lineTo(bi.getWidth() - 1, bi.getHeight() - 1);
-		x.moveTo(0, bi.getHeight() - 1);
-		x.lineTo(bi.getWidth() - 1, 0);
-		g2.draw(x);
-		return new ImageIcon(bi);
-	}
 
 	public static Color parseColor(String rgba)
 	{

@@ -21,7 +21,30 @@
 */
 package idea.plugin.psiviewer.controller.project;
 
-import java.awt.BorderLayout;
+import com.intellij.icons.AllIcons;
+import com.intellij.lang.Language;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComboBox;
+import com.intellij.ui.CollectionComboBoxModel;
+import com.intellij.ui.components.panels.HorizontalLayout;
+import consulo.logging.Logger;
+import idea.plugin.psiviewer.PsiViewerConstants;
+import idea.plugin.psiviewer.controller.actions.PropertyToggleAction;
+import idea.plugin.psiviewer.util.Helpers;
+import idea.plugin.psiviewer.view.PsiViewerPanel;
+
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -30,46 +53,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JPanel;
-
-import org.jdom.Element;
-import com.intellij.icons.AllIcons;
-import com.intellij.lang.Language;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.IconLoader;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.ui.CollectionComboBoxModel;
-import com.intellij.ui.components.panels.HorizontalLayout;
-import com.intellij.ui.content.ContentFactory;
-import com.intellij.ui.content.ContentManager;
-import idea.plugin.psiviewer.PsiViewerConstants;
-import idea.plugin.psiviewer.controller.actions.PropertyToggleAction;
-import idea.plugin.psiviewer.controller.application.PsiViewerApplicationSettings;
-import idea.plugin.psiviewer.util.Helpers;
-import idea.plugin.psiviewer.view.PsiViewerPanel;
-
-public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternalizable, PsiViewerConstants
+@Singleton
+@State(name = "PsiViewerProjectComponent", storages = @Storage(StoragePathMacros.WORKSPACE_FILE))
+public class PsiViewerProjectComponent implements PersistentStateComponent<PsiViewerProjectComponent.State>, PsiViewerConstants
 {
-	private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent");
-	public boolean HIGHLIGHT = false;
-	public boolean FILTER_WHITESPACE = false;
-	public boolean SHOW_PROPERTIES = true;
-	public boolean AUTOSCROLL_TO_SOURCE = false;
-	public boolean AUTOSCROLL_FROM_SOURCE = false;
+	public static class State
+	{
+		public boolean HIGHLIGHT = false;
+		public boolean FILTER_WHITESPACE = false;
+		public boolean SHOW_PROPERTIES = true;
+		public boolean AUTOSCROLL_TO_SOURCE = false;
+		public boolean AUTOSCROLL_FROM_SOURCE = false;
+	}
+
+	private static final Logger LOG = Logger.getInstance(PsiViewerProjectComponent.class);
 
 	private ComboBox myLanguagesComboBox;
 	private ItemListener myLanguagesComboBoxListener = new ItemListener()
@@ -89,39 +86,15 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 	private EditorListener _editorListener;
 	private PsiViewerPanel myViewerPanel;
 
+	private State myState = new State();
+
+	@Inject
 	public PsiViewerProjectComponent(Project project)
 	{
 		myProject = project;
 	}
 
-	public void projectOpened()
-	{
-		if(PsiViewerApplicationSettings.getInstance().PLUGIN_ENABLED)
-		{
-			initToolWindow();
-		}
-	}
-
-	public void projectClosed()
-	{
-		unregisterToolWindow();
-	}
-
-	public void initComponent()
-	{
-	}
-
-	public void disposeComponent()
-	{
-	}
-
-	@Nonnull
-	public String getComponentName()
-	{
-		return PLUGIN_NAME + '.' + PROJECT_COMPONENT_NAME;
-	}
-
-	public void initToolWindow()
+	public void buildUI()
 	{
 		myViewerPanel = new PsiViewerPanel(this);
 
@@ -134,14 +107,14 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 		});
 		ActionManager actionManager = ActionManager.getInstance();
 
-		DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
+		ActionGroup.Builder actionGroup = ActionGroup.newImmutableBuilder();
 		actionGroup.add(new PropertyToggleAction("Filter Whitespace", "Remove whitespace elements", Helpers.getIcon(ICON_FILTER_WHITESPACE), this, "filterWhitespace"));
 		actionGroup.add(new PropertyToggleAction("Highlight", "Highlight selected PSI element", Helpers.getIcon(ICON_TOGGLE_HIGHLIGHT), this, "highlighted"));
 		actionGroup.add(new PropertyToggleAction("Properties", "Show PSI element properties", AllIcons.General.Settings, this, "showProperties"));
 		actionGroup.add(new PropertyToggleAction("Autoscroll to Source", "Autoscroll to Source", AllIcons.General.AutoscrollToSource, this, "autoScrollToSource"));
-		actionGroup.add(new PropertyToggleAction("Autoscroll from Source", "Autoscroll from Source111", AllIcons.General.AutoscrollFromSource, this, "autoScrollFromSource"));
+		actionGroup.add(new PropertyToggleAction("Autoscroll from Source", "Autoscroll from Source", AllIcons.General.AutoscrollFromSource, this, "autoScrollFromSource"));
 
-		ActionToolbar toolBar = actionManager.createActionToolbar(ID_ACTION_TOOLBAR, actionGroup, true);
+		ActionToolbar toolBar = actionManager.createActionToolbar(ID_ACTION_TOOLBAR, actionGroup.build(), true);
 
 		JPanel panel = new JPanel(new HorizontalLayout(0));
 		panel.add(toolBar.getComponent());
@@ -151,10 +124,6 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 		updateLanguagesList(Collections.<Language>emptyList());
 
 		myViewerPanel.add(panel, BorderLayout.NORTH);
-
-		ToolWindow toolWindow = getToolWindow();
-		toolWindow.setIcon(IconLoader.findIcon(ICON_TOOL_WINDOW, PsiViewerProjectComponent.class));
-		myViewerPanel.setToolWindow(toolWindow);
 
 		_editorListener = new EditorListener(myViewerPanel, myProject);
 	}
@@ -178,54 +147,17 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 		}
 	}
 
-	public void unregisterToolWindow()
+	@Nullable
+	@Override
+	public State getState()
 	{
-		if(myViewerPanel != null)
-		{
-			myViewerPanel.removeHighlighting();
-			myViewerPanel = null;
-		}
-
-		if(_editorListener != null)
-		{
-			_editorListener.stop();
-			_editorListener = null;
-		}
-		if(isToolWindowRegistered())
-		{
-			ToolWindowManager.getInstance(myProject).unregisterToolWindow(ID_TOOL_WINDOW);
-		}
+		return myState;
 	}
 
-	private ToolWindow getToolWindow()
+	@Override
+	public void loadState(State state)
 	{
-		ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(myProject);
-		if(isToolWindowRegistered())
-		{
-			return toolWindowManager.getToolWindow(ID_TOOL_WINDOW);
-		}
-		else
-		{
-			ToolWindow toolWindow = toolWindowManager.registerToolWindow(ID_TOOL_WINDOW, false, ToolWindowAnchor.RIGHT, myProject, true);
-			ContentManager contentManager = toolWindow.getContentManager();
-			contentManager.addContent(ContentFactory.SERVICE.getInstance().createContent(myViewerPanel, null, false));
-			return toolWindow;
-		}
-	}
-
-	private boolean isToolWindowRegistered()
-	{
-		return ToolWindowManager.getInstance(myProject).getToolWindow(ID_TOOL_WINDOW) != null;
-	}
-
-	public void readExternal(Element element) throws InvalidDataException
-	{
-		DefaultJDOMExternalizer.readExternal(this, element);
-	}
-
-	public void writeExternal(Element element) throws WriteExternalException
-	{
-		DefaultJDOMExternalizer.writeExternal(this, element);
+		myState = state;
 	}
 
 	public PsiViewerPanel getViewerPanel()
@@ -235,58 +167,58 @@ public class PsiViewerProjectComponent implements ProjectComponent, JDOMExternal
 
 	public boolean isHighlighted()
 	{
-		return HIGHLIGHT;
+		return myState.HIGHLIGHT;
 	}
 
 	public void setHighlighted(boolean highlight)
 	{
 		debug("set highlight to " + highlight);
-		HIGHLIGHT = highlight;
+		myState.HIGHLIGHT = highlight;
 		myViewerPanel.applyHighlighting();
 	}
 
 	public boolean isFilterWhitespace()
 	{
-		return FILTER_WHITESPACE;
+		return myState.FILTER_WHITESPACE;
 	}
 
 	public void setFilterWhitespace(boolean filterWhitespace)
 	{
-		FILTER_WHITESPACE = filterWhitespace;
+		myState.FILTER_WHITESPACE = filterWhitespace;
 		getViewerPanel().applyWhitespaceFilter();
 	}
 
 	public boolean isShowProperties()
 	{
-		return SHOW_PROPERTIES;
+		return myState.SHOW_PROPERTIES;
 	}
 
 	public void setShowProperties(boolean showProperties)
 	{
-		SHOW_PROPERTIES = showProperties;
+		myState.SHOW_PROPERTIES = showProperties;
 		getViewerPanel().showProperties(showProperties);
 	}
 
 	public boolean isAutoScrollToSource()
 	{
-		return AUTOSCROLL_TO_SOURCE;
+		return myState.AUTOSCROLL_TO_SOURCE;
 	}
 
 	public void setAutoScrollToSource(boolean isAutoScrollToSource)
 	{
 		debug("autoscrolltosource=" + isAutoScrollToSource);
-		AUTOSCROLL_TO_SOURCE = isAutoScrollToSource;
+		myState.AUTOSCROLL_TO_SOURCE = isAutoScrollToSource;
 	}
 
 	public boolean isAutoScrollFromSource()
 	{
-		return AUTOSCROLL_FROM_SOURCE;
+		return myState.AUTOSCROLL_FROM_SOURCE;
 	}
 
 	public void setAutoScrollFromSource(boolean isAutoScrollFromSource)
 	{
 		debug("autoscrollfromsource=" + isAutoScrollFromSource);
-		AUTOSCROLL_FROM_SOURCE = isAutoScrollFromSource;
+		myState.AUTOSCROLL_FROM_SOURCE = isAutoScrollFromSource;
 	}
 
 	public Project getProject()
