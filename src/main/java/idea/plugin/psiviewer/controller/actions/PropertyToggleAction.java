@@ -6,18 +6,18 @@ package idea.plugin.psiviewer.controller.actions;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.openapi.diagnostic.Logger;
+import consulo.ui.image.Image;
 import idea.plugin.psiviewer.util.IntrospectionUtil;
 
-import javax.swing.*;
 import java.beans.PropertyDescriptor;
 
 public class PropertyToggleAction extends ToggleAction
 {
-    private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.controller.actions.PropertyToggleAction");
+    private static final Logger LOG = Logger.getInstance(PropertyToggleAction.class);
     private final Object _target;
     private PropertyDescriptor _property;
 
-    public PropertyToggleAction(String actionName, String toolTip, Icon icon, Object target, String property)
+    public PropertyToggleAction(String actionName, String toolTip, Image icon, Object target, String property)
     {
         super(actionName, toolTip, icon);
         _target = target;

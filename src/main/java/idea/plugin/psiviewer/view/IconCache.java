@@ -22,23 +22,18 @@
 
 package idea.plugin.psiviewer.view;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.Icon;
-
-import com.intellij.psi.PsiBinaryFile;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiPlainTextFile;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.*;
+import consulo.ui.image.Image;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.util.Helpers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 class IconCache implements PsiViewerConstants
 {
-	public static final Icon DEFAULT_ICON = Helpers.getIcon(ICON_PSI);
-	public static final Map<Class, Icon> _iconCache = new HashMap<>();
+	public static final Image DEFAULT_ICON = Helpers.getIcon(ICON_PSI);
+	public static final Map<Class, Image> _iconCache = new HashMap<>();
 
 	static
 	{
@@ -51,7 +46,7 @@ class IconCache implements PsiViewerConstants
 		_iconCache.put(PsiDirectory.class, Helpers.getIcon("/nodes/folder.png"));
 	}
 
-	public static Icon getIcon(Class clazz)
+	public static Image getIcon(Class clazz)
 	{
 		return _iconCache.get(clazz);
 	}

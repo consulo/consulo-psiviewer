@@ -22,20 +22,14 @@
 
 package idea.plugin.psiviewer.view;
 
-import java.awt.Component;
-
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeCellRenderer;
-
-import com.intellij.psi.PsiBinaryFile;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiPlainTextFile;
-import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.*;
+import consulo.awt.TargetAWT;
+import consulo.ui.image.Image;
 import idea.plugin.psiviewer.PsiViewerConstants;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
 
 class PsiViewerTreeCellRenderer extends DefaultTreeCellRenderer implements PsiViewerConstants {
     private final ElementVisitor _elementVisitor = new ElementVisitor();
@@ -112,5 +106,9 @@ class PsiViewerTreeCellRenderer extends DefaultTreeCellRenderer implements PsiVi
 
         private ElementVisitor() {
         }
+    }
+
+    public void setIcon(Image icon) {
+        setIcon(TargetAWT.to(icon));
     }
 }

@@ -22,22 +22,15 @@
 
 package idea.plugin.psiviewer.view;
 
-import java.awt.Component;
+import com.intellij.psi.*;
+import consulo.awt.TargetAWT;
+import consulo.ui.image.Image;
+import idea.plugin.psiviewer.PsiViewerConstants;
 
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.TableCellRenderer;
-
-import com.intellij.psi.PsiBinaryFile;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiPlainTextFile;
-import com.intellij.psi.PsiWhiteSpace;
-import idea.plugin.psiviewer.PsiViewerConstants;
+import java.awt.*;
 
 class PropertySheetHeaderRenderer extends JLabel implements TableCellRenderer, PsiViewerConstants
 {
@@ -48,19 +41,19 @@ class PropertySheetHeaderRenderer extends JLabel implements TableCellRenderer, P
 		super();
 	}
 
-	public PropertySheetHeaderRenderer(Icon image)
+	public PropertySheetHeaderRenderer(Image image)
 	{
-		super(image);
+		super(TargetAWT.to(image));
 	}
 
-	public PropertySheetHeaderRenderer(Icon image, int horizontalAlignment)
+	public PropertySheetHeaderRenderer(Image image, int horizontalAlignment)
 	{
-		super(image, horizontalAlignment);
+		super(TargetAWT.to(image), horizontalAlignment);
 	}
 
-	public PropertySheetHeaderRenderer(Icon image, int horizontalAlignment, Border border)
+	public PropertySheetHeaderRenderer(Image image, int horizontalAlignment, Border border)
 	{
-		super(image, horizontalAlignment);
+		super(TargetAWT.to(image), horizontalAlignment);
 		setBorder(border);
 	}
 
@@ -85,7 +78,12 @@ class PropertySheetHeaderRenderer extends JLabel implements TableCellRenderer, P
 		//        }
 	}
 
-	private class ElementVisitor extends PsiElementVisitor
+	public void setIcon(Image icon)
+	{
+		setIcon(TargetAWT.to(icon));
+	}
+
+    private class ElementVisitor extends PsiElementVisitor
 	{
 		public void visitBinaryFile(PsiBinaryFile psiElement)
 		{

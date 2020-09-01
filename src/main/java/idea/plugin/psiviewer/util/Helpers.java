@@ -22,8 +22,8 @@
 package idea.plugin.psiviewer.util;
 
 import com.intellij.openapi.util.IconLoader;
+import consulo.ui.image.Image;
 
-import javax.swing.*;
 import java.awt.*;
 
 public final class Helpers
@@ -35,11 +35,10 @@ public final class Helpers
 	 * @param path
 	 * @return An Icon almost guaranteed to be usable.
 	 */
-	public static Icon getIcon(String path)
+	public static Image getIcon(String path)
 	{
 		return IconLoader.findIcon(path, Helpers.class);
 	}
-
 
 	public static Color parseColor(String rgba)
 	{
