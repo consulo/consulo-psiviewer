@@ -9,7 +9,7 @@
 	<extensions defaultExtensionNs="com.intellij">
 		<projectService serviceImplementation="idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent" />
 
-		<toolWindow id="PsiViewer" icon="/images/psiToolWindow.png" anchor="right" factoryClass="consulo.psiviewer.toolWindow.PsiViewerToolwindowFactory" />
+		<toolWindow id="PsiViewer" icon="consulo.psiviewer.PsiViewerIconGroup@psitoolwindow" anchor="right" factoryClass="consulo.psiviewer.toolWindow.PsiViewerToolwindowFactory" />
 	</extensions>
 
 	<!-- Component's actions -->

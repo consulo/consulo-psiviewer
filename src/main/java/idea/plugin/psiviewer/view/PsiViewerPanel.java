@@ -37,10 +37,10 @@ import com.intellij.ui.OnePixelSplitter;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.psiviewer.icon.PsiViewerIconGroup;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent;
 import idea.plugin.psiviewer.model.PsiViewerTreeModel;
-import idea.plugin.psiviewer.util.Helpers;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,7 +61,7 @@ import java.util.LinkedList;
 
 public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstants
 {
-	private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.view.PsiViewerPanel");
+	private static final Logger LOG = Logger.getInstance(PsiViewerPanel.class);
 
 	private String _actionTitle;
 	private PsiViewerTree myTree;
@@ -75,9 +75,9 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 	private final EditorCaretMover _caretMover;
 	private final EditorPsiElementHighlighter _highlighter;
 	private final PsiViewerProjectComponent _projectComponent;
-	private final PropertySheetHeaderRenderer _propertyHeaderRenderer = new PropertySheetHeaderRenderer(Helpers.getIcon(PsiViewerConstants.ICON_PSI), SwingConstants.LEFT, BorderFactory
+	private final PropertySheetHeaderRenderer _propertyHeaderRenderer = new PropertySheetHeaderRenderer(PsiViewerIconGroup.psi(), SwingConstants.LEFT, BorderFactory
 			.createEtchedBorder());
-	private final PropertySheetHeaderRenderer _valueHeaderRenderer = new PropertySheetHeaderRenderer(Helpers.getIcon(PsiViewerConstants.ICON_PSI), SwingConstants.LEFT, BorderFactory
+	private final PropertySheetHeaderRenderer _valueHeaderRenderer = new PropertySheetHeaderRenderer(PsiViewerIconGroup.psi(), SwingConstants.LEFT, BorderFactory
 			.createEtchedBorder());
 
 	public PsiViewerPanel(PsiViewerProjectComponent projectComponent)

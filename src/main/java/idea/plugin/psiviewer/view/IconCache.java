@@ -23,27 +23,28 @@
 package idea.plugin.psiviewer.view;
 
 import com.intellij.psi.*;
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.psiviewer.icon.PsiViewerIconGroup;
 import consulo.ui.image.Image;
 import idea.plugin.psiviewer.PsiViewerConstants;
-import idea.plugin.psiviewer.util.Helpers;
 
 import java.util.HashMap;
 import java.util.Map;
 
 class IconCache implements PsiViewerConstants
 {
-	public static final Image DEFAULT_ICON = Helpers.getIcon(ICON_PSI);
+	public static final Image DEFAULT_ICON = PsiViewerIconGroup.psi18x18();
 	public static final Map<Class, Image> _iconCache = new HashMap<>();
 
 	static
 	{
-		_iconCache.put(PsiBinaryFile.class, Helpers.getIcon("/fileTypes/unknown.png"));
-		_iconCache.put(PsiPlainTextFile.class, Helpers.getIcon("/fileTypes/text.png"));
+		_iconCache.put(PsiBinaryFile.class, PlatformIconGroup.fileTypesUnknown());
+		_iconCache.put(PsiPlainTextFile.class, PlatformIconGroup.fileTypesText());
 
-		_iconCache.put(PsiWhiteSpace.class, Helpers.getIcon(ICON_WHITESPACE));
-		_iconCache.put(PsiComment.class, Helpers.getIcon(ICON_COMMENT));
+		_iconCache.put(PsiWhiteSpace.class, PsiViewerIconGroup.whitespace());
+		_iconCache.put(PsiComment.class, PsiViewerIconGroup.comment());
 
-		_iconCache.put(PsiDirectory.class, Helpers.getIcon("/nodes/folder.png"));
+		_iconCache.put(PsiDirectory.class, PlatformIconGroup.nodesFolder());
 	}
 
 	public static Image getIcon(Class clazz)

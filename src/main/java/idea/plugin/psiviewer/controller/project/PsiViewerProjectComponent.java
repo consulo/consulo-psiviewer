@@ -35,9 +35,9 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.CollectionComboBoxModel;
 import com.intellij.ui.components.panels.HorizontalLayout;
 import consulo.logging.Logger;
+import consulo.psiviewer.icon.PsiViewerIconGroup;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.actions.PropertyToggleAction;
-import idea.plugin.psiviewer.util.Helpers;
 import idea.plugin.psiviewer.view.PsiViewerPanel;
 
 import javax.annotation.Nullable;
@@ -108,8 +108,8 @@ public class PsiViewerProjectComponent implements PersistentStateComponent<PsiVi
 		ActionManager actionManager = ActionManager.getInstance();
 
 		ActionGroup.Builder actionGroup = ActionGroup.newImmutableBuilder();
-		actionGroup.add(new PropertyToggleAction("Filter Whitespace", "Remove whitespace elements", Helpers.getIcon(ICON_FILTER_WHITESPACE), this, "filterWhitespace"));
-		actionGroup.add(new PropertyToggleAction("Highlight", "Highlight selected PSI element", Helpers.getIcon(ICON_TOGGLE_HIGHLIGHT), this, "highlighted"));
+		actionGroup.add(new PropertyToggleAction("Filter Whitespace", "Remove whitespace elements", PsiViewerIconGroup.filterWhitespace(), this, "filterWhitespace"));
+		actionGroup.add(new PropertyToggleAction("Highlight", "Highlight selected PSI element", PsiViewerIconGroup.highlighter(), this, "highlighted"));
 		actionGroup.add(new PropertyToggleAction("Properties", "Show PSI element properties", AllIcons.General.Settings, this, "showProperties"));
 		actionGroup.add(new PropertyToggleAction("Autoscroll to Source", "Autoscroll to Source", AllIcons.General.AutoscrollToSource, this, "autoScrollToSource"));
 		actionGroup.add(new PropertyToggleAction("Autoscroll from Source", "Autoscroll from Source", AllIcons.General.AutoscrollFromSource, this, "autoScrollFromSource"));

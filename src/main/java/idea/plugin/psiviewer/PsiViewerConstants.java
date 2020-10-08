@@ -25,20 +25,6 @@ import com.intellij.openapi.editor.markup.HighlighterLayer;
 
 public interface PsiViewerConstants
 {
-    // Plugin names
-    String PLUGIN_NAME = "PsiViewer";
-    String CONFIGURATION_COMPONENT_NAME = "PsiViewerPluginSettings";
-
-    // Icons
-    String ICON_CONFIGURATION = "/images/psi.png";
-    String ICON_TOOL_WINDOW = "/images/psiToolWindow.png";
-    String ICON_PSI = "/images/psi18x18.png";
-    String ICON_WHITESPACE = "/images/whitespace.png";
-    String ICON_FILTER_WHITESPACE = "/images/filterWhitespace.png";
-    String ICON_TOGGLE_HIGHLIGHT = "/images/highlighter.png";
-    String ICON_SHOW_PROPERTIES = "/objectBrowser/showStructure.png";
-    String ICON_COMMENT = "/images/comment.png";
-
     // Ids
     String ID_TOOL_WINDOW = "PsiViewer";
     String ID_ACTION_GROUP = "PsiActionGroup";

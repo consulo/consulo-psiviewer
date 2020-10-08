@@ -21,25 +21,10 @@
 */
 package idea.plugin.psiviewer.util;
 
-import com.intellij.openapi.util.IconLoader;
-import consulo.ui.image.Image;
-
 import java.awt.*;
 
 public final class Helpers
 {
-	/**
-	 * Gets an icon either via the class loader, or from a url (maybe a file). <p> To keep the peace, it will always
-	 * return <i>some</i> sort of icon even if it has to build one on-the-fly.
-	 *
-	 * @param path
-	 * @return An Icon almost guaranteed to be usable.
-	 */
-	public static Image getIcon(String path)
-	{
-		return IconLoader.findIcon(path, Helpers.class);
-	}
-
 	public static Color parseColor(String rgba)
 	{
 		int red = 0, green = 0, blue = 0, alpha = 128;
@@ -81,5 +66,4 @@ public final class Helpers
 	{
 		return color.getRed() + " " + color.getGreen() + " " + color.getBlue() + " " + color.getAlpha();
 	}
-
 }
