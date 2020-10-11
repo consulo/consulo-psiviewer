@@ -9,7 +9,7 @@ import javax.swing.table.TableModel;
 import org.junit.Assert;
 import junit.framework.TestCase;
 
-public class PropertySheetPanelTest extends TestCase
+public abstract class PropertySheetPanelTest extends TestCase
 {
     public PropertySheetPanelTest(String s)
     {
