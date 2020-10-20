@@ -39,10 +39,11 @@ import consulo.psiviewer.icon.PsiViewerIconGroup;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.actions.PropertyToggleAction;
 import idea.plugin.psiviewer.view.PsiViewerPanel;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+
+import jakarta.inject.Singleton;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
