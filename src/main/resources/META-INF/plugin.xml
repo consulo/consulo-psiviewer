@@ -6,6 +6,10 @@
 	<version>SNAPSHOT</version>
 	<vendor>Andrew Armstrong, Bas Leijdekkers, Vince Mallet, Ole Matzura, Jacques Morel, Colin Fleming, Jon Akhtar</vendor>
 
+	<tags>
+		<tag>ide.extension</tag>
+	</tags>
+
 	<extensions defaultExtensionNs="com.intellij">
 		<projectService serviceImplementation="idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent" />
 
