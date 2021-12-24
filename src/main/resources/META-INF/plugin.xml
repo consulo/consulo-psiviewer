@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<consulo-plugin>
+<consulo-plugin url="https://github.com/consulo/consulo-psiviewer">
 	<id>consulo.psiviewer</id>
 	<name>PsiViewer</name>
 	<description>A Program Structure Interface (PSI) tree viewer. This plugin may be useful for developers who are considering using the PSI interface in their own plugins.</description>
