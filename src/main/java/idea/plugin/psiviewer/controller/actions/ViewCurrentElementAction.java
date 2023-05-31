@@ -21,13 +21,12 @@
 */
 package idea.plugin.psiviewer.controller.actions;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.ui.ex.action.AnActionEvent;
 import idea.plugin.psiviewer.util.ActionEventUtil;
 
 public class ViewCurrentElementAction extends BaseGlobalAction
 {
-
     protected PsiElement getTargetElement(AnActionEvent event)
     {
         return ActionEventUtil.getPsiElement(event);
@@ -37,5 +36,4 @@ public class ViewCurrentElementAction extends BaseGlobalAction
     {
         return "psi.Element";
     }
-
 }

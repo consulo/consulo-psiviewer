@@ -21,36 +21,36 @@
 */
 package idea.plugin.psiviewer.controller.project;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.event.CaretAdapter;
-import com.intellij.openapi.editor.event.CaretEvent;
-import com.intellij.openapi.editor.event.CaretListener;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
-import com.intellij.openapi.fileEditor.FileEditorManagerListener;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiTreeChangeAdapter;
-import com.intellij.psi.PsiTreeChangeEvent;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.messages.MessageBusConnection;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.event.CaretAdapter;
+import consulo.codeEditor.event.CaretEvent;
+import consulo.codeEditor.event.CaretListener;
+import consulo.component.messagebus.MessageBusConnection;
+import consulo.fileEditor.FileEditorManager;
+import consulo.fileEditor.event.FileEditorManagerEvent;
+import consulo.fileEditor.event.FileEditorManagerListener;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.event.PsiTreeChangeAdapter;
+import consulo.language.psi.event.PsiTreeChangeEvent;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import idea.plugin.psiviewer.view.PsiViewerPanel;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author <a href="mailto:andrew_armstrong@bigpond.com">Andrew Armstrong</a>
  * @version $Revision: 1.1 $
  */
-public class EditorListener extends CaretAdapter implements FileEditorManagerListener, CaretListener {
+public class EditorListener extends CaretAdapter implements FileEditorManagerListener, CaretListener
+{
 
 
-    private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.controller.project.EditorListener");
+    private static final Logger LOG = Logger.getInstance(EditorListener.class);
 
     private final PsiViewerPanel _viewer;
     private final Project _project;
@@ -149,7 +149,7 @@ public class EditorListener extends CaretAdapter implements FileEditorManagerLis
 
     public void start() {
         _msgbus = _project.getMessageBus().connect();
-        _msgbus.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, this);
+        _msgbus.subscribe(FileEditorManagerListener.class, this);
 
         PsiManager.getInstance(_project).addPsiTreeChangeListener(_treeChangeListener);
 

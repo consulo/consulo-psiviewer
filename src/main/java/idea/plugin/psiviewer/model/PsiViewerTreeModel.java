@@ -22,8 +22,8 @@
 
 package idea.plugin.psiviewer.model;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
 import idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent;
 
 import javax.swing.event.TreeModelListener;

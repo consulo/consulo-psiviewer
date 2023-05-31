@@ -22,8 +22,9 @@
 
 package idea.plugin.psiviewer.view;
 
-import com.intellij.psi.*;
-import consulo.awt.TargetAWT;
+import consulo.language.plain.psi.PsiPlainTextFile;
+import consulo.language.psi.*;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import idea.plugin.psiviewer.PsiViewerConstants;
 
@@ -55,7 +56,8 @@ class PsiViewerTreeCellRenderer extends DefaultTreeCellRenderer implements PsiVi
         setOpaque(false);
     }
 
-    private class ElementVisitor extends PsiElementVisitor {
+    private class ElementVisitor extends PsiElementVisitor
+	{
 
         private static final int MAX_TEXT_LENGTH = 80;
 

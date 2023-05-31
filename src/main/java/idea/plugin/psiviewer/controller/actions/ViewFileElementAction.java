@@ -21,10 +21,10 @@
 */
 package idea.plugin.psiviewer.controller.actions;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.Presentation;
+import consulo.virtualFileSystem.VirtualFile;
 import idea.plugin.psiviewer.util.ActionEventUtil;
 
 public class ViewFileElementAction extends BaseGlobalAction

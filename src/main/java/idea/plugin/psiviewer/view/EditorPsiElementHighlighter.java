@@ -3,32 +3,31 @@
  */
 package idea.plugin.psiviewer.view;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.markup.HighlighterTargetArea;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiWhiteSpace;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.CodeInsightColors;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.markup.HighlighterTargetArea;
+import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.TextAttributes;
+import consulo.document.FileDocumentManager;
+import consulo.document.util.TextRange;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent;
 import idea.plugin.psiviewer.util.PluginPsiUtil;
-
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 class EditorPsiElementHighlighter
 {
-	private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.view.Highlighter");
+	private static final Logger LOG = Logger.getInstance(EditorPsiElementHighlighter.class);
 
 	private final Project _project;
 	private RangeHighlighter _highlighter;
@@ -40,7 +39,7 @@ class EditorPsiElementHighlighter
 		_project = project;
 	}
 
-	void highlightElement(@Nullable  PsiElement psiElement)
+	void highlightElement(@Nullable PsiElement psiElement)
 	{
 		ApplicationManager.getApplication().runReadAction(() -> apply(psiElement));
 

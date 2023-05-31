@@ -1,13 +1,13 @@
 package idea.plugin.psiviewer.controller.actions;
 
-import java.awt.datatransfer.StringSelection;
+import consulo.language.editor.LangDataKeys;
+import consulo.language.impl.DebugUtil;
+import consulo.language.psi.PsiFile;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.awt.CopyPasteManager;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.ide.CopyPasteManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.DebugUtil;
+import java.awt.datatransfer.StringSelection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,7 +15,8 @@ import com.intellij.psi.impl.DebugUtil;
  * Date: 5/4/11
  * Time: 6:41 PM
  */
-public class PsiDump extends AnAction {
+public class PsiDump extends AnAction
+{
   @Override
   public void actionPerformed(AnActionEvent e) {
     PsiFile pf = getFile(e);

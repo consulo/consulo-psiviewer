@@ -3,14 +3,15 @@
  */
 package idea.plugin.psiviewer.view;
 
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import idea.plugin.psiviewer.util.PluginPsiUtil;
 
 class EditorCaretMover
@@ -77,7 +78,7 @@ class EditorCaretMover
 
         if (virtualFile == null) return null;
 
-        OpenFileDescriptor fileDesc = new OpenFileDescriptor(_project, virtualFile, i);    // 20050826 IDEA 5.0.1 #3461
+        OpenFileDescriptor fileDesc = OpenFileDescriptorFactory.getInstance(_project).builder(virtualFile).offset(i).build(); 
         disableMovementOneTime();
         return FileEditorManager.getInstance(_project).openTextEditor(fileDesc, false);
     }

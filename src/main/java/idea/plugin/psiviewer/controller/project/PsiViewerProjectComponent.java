@@ -21,29 +21,31 @@
 */
 package idea.plugin.psiviewer.controller.project;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.lang.Language;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.ui.CollectionComboBoxModel;
-import com.intellij.ui.components.panels.HorizontalLayout;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
+import consulo.application.AllIcons;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
+import consulo.language.Language;
 import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.psiviewer.icon.PsiViewerIconGroup;
+import consulo.ui.ex.action.ActionGroup;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.ActionToolbar;
+import consulo.ui.ex.awt.CollectionComboBoxModel;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.ui.ex.awt.HorizontalLayout;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.actions.PropertyToggleAction;
 import idea.plugin.psiviewer.view.PsiViewerPanel;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
-
-import javax.annotation.Nullable;
-
 import jakarta.inject.Singleton;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -54,6 +56,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 @Singleton
 @State(name = "PsiViewerProjectComponent", storages = @Storage(StoragePathMacros.WORKSPACE_FILE))
 public class PsiViewerProjectComponent implements PersistentStateComponent<PsiViewerProjectComponent.State>, PsiViewerConstants
@@ -109,14 +113,15 @@ public class PsiViewerProjectComponent implements PersistentStateComponent<PsiVi
 		ActionManager actionManager = ActionManager.getInstance();
 
 		ActionGroup.Builder actionGroup = ActionGroup.newImmutableBuilder();
-		actionGroup.add(new PropertyToggleAction("Filter Whitespace", "Remove whitespace elements", PsiViewerIconGroup.filterWhitespace(), this, "filterWhitespace"));
+		actionGroup.add(new PropertyToggleAction("Filter Whitespace", "Remove whitespace elements", PsiViewerIconGroup.filterwhitespace(), this, "filterWhitespace"));
 		actionGroup.add(new PropertyToggleAction("Highlight", "Highlight selected PSI element", PsiViewerIconGroup.highlighter(), this, "highlighted"));
 		actionGroup.add(new PropertyToggleAction("Properties", "Show PSI element properties", AllIcons.General.Settings, this, "showProperties"));
 		actionGroup.add(new PropertyToggleAction("Autoscroll to Source", "Autoscroll to Source", AllIcons.General.AutoscrollToSource, this, "autoScrollToSource"));
 		actionGroup.add(new PropertyToggleAction("Autoscroll from Source", "Autoscroll from Source", AllIcons.General.AutoscrollFromSource, this, "autoScrollFromSource"));
 
 		ActionToolbar toolBar = actionManager.createActionToolbar(ID_ACTION_TOOLBAR, actionGroup.build(), true);
-
+		toolBar.setTargetComponent(myViewerPanel);
+		
 		JPanel panel = new JPanel(new HorizontalLayout(0));
 		panel.add(toolBar.getComponent());
 

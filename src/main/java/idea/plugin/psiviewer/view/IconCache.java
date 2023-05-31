@@ -22,7 +22,11 @@
 
 package idea.plugin.psiviewer.view;
 
-import com.intellij.psi.*;
+import consulo.language.plain.psi.PsiPlainTextFile;
+import consulo.language.psi.PsiBinaryFile;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiWhiteSpace;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.psiviewer.icon.PsiViewerIconGroup;
 import consulo.ui.image.Image;
@@ -38,8 +42,8 @@ class IconCache implements PsiViewerConstants
 
 	static
 	{
-		_iconCache.put(PsiBinaryFile.class, PlatformIconGroup.fileTypesUnknown());
-		_iconCache.put(PsiPlainTextFile.class, PlatformIconGroup.fileTypesText());
+		_iconCache.put(PsiBinaryFile.class, PlatformIconGroup.filetypesUnknown());
+		_iconCache.put(PsiPlainTextFile.class, PlatformIconGroup.filetypesText());
 
 		_iconCache.put(PsiWhiteSpace.class, PsiViewerIconGroup.whitespace());
 		_iconCache.put(PsiComment.class, PsiViewerIconGroup.comment());

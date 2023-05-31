@@ -3,23 +3,22 @@
  */
 package idea.plugin.psiviewer.controller.actions;
 
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiDocumentManager;
-import idea.plugin.psiviewer.util.ActionEventUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.project.ui.wm.ToolWindowManager;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.DumbAwareAction;
+import consulo.ui.ex.action.Presentation;
+import consulo.ui.ex.toolWindow.ToolWindow;
+import consulo.virtualFileSystem.VirtualFile;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent;
+import idea.plugin.psiviewer.util.ActionEventUtil;
 import idea.plugin.psiviewer.view.PsiViewerPanel;
 
-abstract class BaseGlobalAction extends AnAction
+abstract class BaseGlobalAction extends DumbAwareAction
 {
-
     public void update(AnActionEvent event)
     {
         Presentation presentation = event.getPresentation();

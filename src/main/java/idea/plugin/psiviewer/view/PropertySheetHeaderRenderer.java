@@ -22,8 +22,9 @@
 
 package idea.plugin.psiviewer.view;
 
-import com.intellij.psi.*;
-import consulo.awt.TargetAWT;
+import consulo.language.plain.psi.PsiPlainTextFile;
+import consulo.language.psi.*;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import idea.plugin.psiviewer.PsiViewerConstants;
 
@@ -39,22 +40,6 @@ class PropertySheetHeaderRenderer extends JLabel implements TableCellRenderer, P
 	public PropertySheetHeaderRenderer()
 	{
 		super();
-	}
-
-	public PropertySheetHeaderRenderer(Image image)
-	{
-		super(TargetAWT.to(image));
-	}
-
-	public PropertySheetHeaderRenderer(Image image, int horizontalAlignment)
-	{
-		super(TargetAWT.to(image), horizontalAlignment);
-	}
-
-	public PropertySheetHeaderRenderer(Image image, int horizontalAlignment, Border border)
-	{
-		super(TargetAWT.to(image), horizontalAlignment);
-		setBorder(border);
 	}
 
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)

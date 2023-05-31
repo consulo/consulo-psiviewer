@@ -1,7 +1,7 @@
 package idea.plugin.psiviewer.controller.actions;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
+import consulo.ui.ex.action.AnActionEvent;
 
 /**
  * Created by IntelliJ IDEA.

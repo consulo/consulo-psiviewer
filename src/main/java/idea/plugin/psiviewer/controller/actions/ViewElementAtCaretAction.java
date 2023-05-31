@@ -21,10 +21,10 @@
 */
 package idea.plugin.psiviewer.controller.actions;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.ui.ex.action.AnActionEvent;
 import idea.plugin.psiviewer.util.ActionEventUtil;
 
 public class ViewElementAtCaretAction extends BaseGlobalAction

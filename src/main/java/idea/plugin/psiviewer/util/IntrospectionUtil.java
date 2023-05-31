@@ -3,7 +3,7 @@
  */
 package idea.plugin.psiviewer.util;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 
 public class IntrospectionUtil
 {
-    private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.util.IntrospectionUtil");
+    private static final Logger LOG = Logger.getInstance(IntrospectionUtil.class);
 
     public static PropertyDescriptor[] getProperties(Class targetClass)
     {

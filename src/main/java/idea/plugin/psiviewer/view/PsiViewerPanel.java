@@ -21,29 +21,27 @@
 */
 package idea.plugin.psiviewer.view;
 
-import com.intellij.lang.Language;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.OnePixelSplitter;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.psiviewer.icon.PsiViewerIconGroup;
+import consulo.codeEditor.Editor;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.Language;
+import consulo.language.file.FileViewProvider;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.project.ui.wm.ToolWindowManager;
+import consulo.ui.ex.awt.OnePixelSplitter;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.toolWindow.ToolWindow;
+import consulo.util.collection.ContainerUtil;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.project.PsiViewerProjectComponent;
 import idea.plugin.psiviewer.model.PsiViewerTreeModel;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -75,10 +73,6 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 	private final EditorCaretMover _caretMover;
 	private final EditorPsiElementHighlighter _highlighter;
 	private final PsiViewerProjectComponent _projectComponent;
-	private final PropertySheetHeaderRenderer _propertyHeaderRenderer = new PropertySheetHeaderRenderer(PsiViewerIconGroup.psi(), SwingConstants.LEFT, BorderFactory
-			.createEtchedBorder());
-	private final PropertySheetHeaderRenderer _valueHeaderRenderer = new PropertySheetHeaderRenderer(PsiViewerIconGroup.psi(), SwingConstants.LEFT, BorderFactory
-			.createEtchedBorder());
 
 	public PsiViewerPanel(PsiViewerProjectComponent projectComponent)
 	{
@@ -261,10 +255,6 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 		}
 		myPropertyPanel.setTarget(_selectedElement);
 		myPropertyPanel.getTable().getTableHeader().setReorderingAllowed(false);
-
-		_propertyHeaderRenderer.setIconForElement(_selectedElement);
-		myPropertyPanel.getTable().getColumnModel().getColumn(0).setHeaderRenderer(_propertyHeaderRenderer);
-		myPropertyPanel.getTable().getColumnModel().getColumn(1).setHeaderRenderer(_valueHeaderRenderer);
 	}
 
 	private void changeTreeSelection()
@@ -317,14 +307,7 @@ public class PsiViewerPanel extends JPanel implements Runnable, PsiViewerConstan
 			FileViewProvider viewProvider = ((PsiFile) rootElement).getViewProvider();
 
 			// iteration need, because getLanguages returns Set, not list, order is random
-			_projectComponent.updateLanguagesList(ContainerUtil.map(viewProvider.getAllFiles(), new Function<PsiFile, Language>()
-			{
-				@Override
-				public Language fun(PsiFile psiFile)
-				{
-					return psiFile.getLanguage();
-				}
-			}));
+			_projectComponent.updateLanguagesList(ContainerUtil.map(viewProvider.getAllFiles(), PsiElement::getLanguage));
 			Language selectedLanguage = _projectComponent.getSelectedLanguage();
 
 			if(selectedLanguage != null)

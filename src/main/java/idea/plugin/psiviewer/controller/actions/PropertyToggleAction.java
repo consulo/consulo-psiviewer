@@ -3,9 +3,9 @@
  */
 package idea.plugin.psiviewer.controller.actions;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.ToggleAction;
 import consulo.ui.image.Image;
 import idea.plugin.psiviewer.util.IntrospectionUtil;
 

@@ -21,12 +21,12 @@
 */
 package idea.plugin.psiviewer;
 
-import com.intellij.openapi.editor.markup.HighlighterLayer;
+import consulo.codeEditor.markup.HighlighterLayer;
 
 public interface PsiViewerConstants
 {
     // Ids
-    String ID_TOOL_WINDOW = "PsiViewer";
+    String ID_TOOL_WINDOW = "psi-viewer";
     String ID_ACTION_GROUP = "PsiActionGroup";
     String ID_ACTION_TOOLBAR = "PsiActionToolbar";
 

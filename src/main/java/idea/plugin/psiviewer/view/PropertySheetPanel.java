@@ -3,32 +3,21 @@
  */
 package idea.plugin.psiviewer.view;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
+import consulo.logging.Logger;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.xml.XmlStringUtil;
+import idea.plugin.psiviewer.util.IntrospectionUtil;
+
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JToolTip;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.xml.util.XmlStringUtil;
-import idea.plugin.psiviewer.util.IntrospectionUtil;
+import java.util.*;
 
 /**
  * A property sheet describing the selected PSI element.
@@ -40,7 +29,7 @@ public class PropertySheetPanel extends JPanel
     private Object _target;
     private JTable myTable;
 
-    private static final Logger LOG = Logger.getInstance("idea.plugin.psiviewer.view.PropertySheetPanel");
+    private static final Logger LOG = Logger.getInstance(PropertySheetPanel.class);
 
     public PropertySheetPanel()
     {
