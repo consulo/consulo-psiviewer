@@ -31,14 +31,16 @@ import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
 import consulo.language.Language;
 import consulo.logging.Logger;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
-import consulo.psiviewer.icon.PsiViewerIconGroup;
+import consulo.ui.ex.JBColor;
 import consulo.ui.ex.action.ActionGroup;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.ActionToolbar;
 import consulo.ui.ex.awt.CollectionComboBoxModel;
 import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.HorizontalLayout;
+import consulo.ui.ex.awt.JBUI;
 import idea.plugin.psiviewer.PsiViewerConstants;
 import idea.plugin.psiviewer.controller.actions.PropertyToggleAction;
 import idea.plugin.psiviewer.view.PsiViewerPanel;
@@ -113,23 +115,25 @@ public class PsiViewerProjectComponent implements PersistentStateComponent<PsiVi
 		ActionManager actionManager = ActionManager.getInstance();
 
 		ActionGroup.Builder actionGroup = ActionGroup.newImmutableBuilder();
-		actionGroup.add(new PropertyToggleAction("Filter Whitespace", "Remove whitespace elements", PsiViewerIconGroup.filterwhitespace(), this, "filterWhitespace"));
-		actionGroup.add(new PropertyToggleAction("Highlight", "Highlight selected PSI element", PsiViewerIconGroup.highlighter(), this, "highlighted"));
+		actionGroup.add(new PropertyToggleAction("Filter Whitespace", "Remove whitespace elements", PlatformIconGroup.generalFilter(), this, "filterWhitespace"));
+		actionGroup.add(new PropertyToggleAction("Highlight", "Highlight selected PSI element", PlatformIconGroup.generalInspectionseye(), this, "highlighted"));
 		actionGroup.add(new PropertyToggleAction("Properties", "Show PSI element properties", AllIcons.General.Settings, this, "showProperties"));
 		actionGroup.add(new PropertyToggleAction("Autoscroll to Source", "Autoscroll to Source", AllIcons.General.AutoscrollToSource, this, "autoScrollToSource"));
 		actionGroup.add(new PropertyToggleAction("Autoscroll from Source", "Autoscroll from Source", AllIcons.General.AutoscrollFromSource, this, "autoScrollFromSource"));
 
 		ActionToolbar toolBar = actionManager.createActionToolbar(ID_ACTION_TOOLBAR, actionGroup.build(), true);
 		toolBar.setTargetComponent(myViewerPanel);
-		
-		JPanel panel = new JPanel(new HorizontalLayout(0));
-		panel.add(toolBar.getComponent());
+		JComponent toolBarComponent = toolBar.getComponent();
+
+		JPanel topPanel = new JPanel(new HorizontalLayout(0));
+		topPanel.setBorder(JBUI.Borders.customLine(JBColor.border(), 0, 0, 1, 0));
+		topPanel.add(toolBarComponent);
 
 		myLanguagesComboBox = new ComboBox();
-		panel.add(myLanguagesComboBox);
+		topPanel.add(myLanguagesComboBox);
 		updateLanguagesList(Collections.<Language>emptyList());
 
-		myViewerPanel.add(panel, BorderLayout.NORTH);
+		myViewerPanel.add(topPanel, BorderLayout.NORTH);
 
 		_editorListener = new EditorListener(myViewerPanel, myProject);
 	}

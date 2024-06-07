@@ -22,8 +22,8 @@
 
 package idea.plugin.psiviewer.view;
 
-import consulo.language.plain.psi.PsiPlainTextFile;
-import consulo.language.psi.*;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiElement;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import idea.plugin.psiviewer.PsiViewerConstants;
@@ -32,85 +32,27 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
 
-class PsiViewerTreeCellRenderer extends DefaultTreeCellRenderer implements PsiViewerConstants {
-    private final ElementVisitor _elementVisitor = new ElementVisitor();
-
-    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean isSelected, boolean isExpanded,
-                                                  boolean isLeaf, int row, boolean hasFocus) {
-        super.getTreeCellRendererComponent(tree, value, isSelected, isExpanded, isLeaf, row, hasFocus);
-        setIcon(IconCache.DEFAULT_ICON);
-
-        PsiElement psiElement = (PsiElement) value;
-
-        psiElement.accept(_elementVisitor);
-
-//        try {
-//            psiElement.accept(new PsiViewerTreeCellJavaElementVisitor(this));
-//        } catch (Exception e) {
-//        }
-
-        return this;
-    }
-
-    public PsiViewerTreeCellRenderer() {
-        setOpaque(false);
-    }
-
-    private class ElementVisitor extends PsiElementVisitor
+class PsiViewerTreeCellRenderer extends DefaultTreeCellRenderer implements PsiViewerConstants
+{
+	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean isSelected, boolean isExpanded,
+												  boolean isLeaf, int row, boolean hasFocus)
 	{
+		super.getTreeCellRendererComponent(tree, value, isSelected, isExpanded, isLeaf, row, hasFocus);
 
-        private static final int MAX_TEXT_LENGTH = 80;
+		PsiElement psiElement = (PsiElement) value;
 
+		setIcon(IconDescriptorUpdaters.getIcon(psiElement, 0));
 
-        public void visitBinaryFile(PsiBinaryFile psiElement) {
-            setIcon(IconCache.getIcon(PsiBinaryFile.class));
-            setText("PsiBinaryFile: " + psiElement.getName());
-        }
+		return this;
+	}
 
+	public PsiViewerTreeCellRenderer()
+	{
+		setOpaque(false);
+	}
 
-        public void visitComment(PsiComment psiElement) {
-            setIcon(IconCache.getIcon(PsiComment.class));
-            setText("PsiComment: " + truncate(psiElement.getText()));
-        }
-
-        public void visitDirectory(PsiDirectory psiElement) {
-            setIcon(IconCache.getIcon(PsiDirectory.class));
-            setText("PsiDirectory: " + psiElement.getName());
-        }
-
-        public void visitElement(PsiElement psiElement) {
-            setText(psiElement.toString());
-        }
-
-
-        public void visitFile(PsiFile psiElement) {
-            setText("PsiFile: " + psiElement.getName());
-        }
-
-
-        public void visitPlainTextFile(PsiPlainTextFile psiElement) {
-            setIcon(IconCache.getIcon(PsiPlainTextFile.class));
-            setText("PsiPlainTextFile: " + psiElement.getName());
-        }
-
-
-        public void visitWhiteSpace(PsiWhiteSpace psiElement) {
-            setIcon(IconCache.getIcon(PsiWhiteSpace.class));
-            setText("PsiWhiteSpace");
-        }
-
-        private String truncate(String text) {
-            if (text.length() > MAX_TEXT_LENGTH)
-                return text.substring(0, MAX_TEXT_LENGTH).trim() + "...";
-            else
-                return text;
-        }
-
-        private ElementVisitor() {
-        }
-    }
-
-    public void setIcon(Image icon) {
-        setIcon(TargetAWT.to(icon));
-    }
+	public void setIcon(Image icon)
+	{
+		setIcon(TargetAWT.to(icon));
+	}
 }
