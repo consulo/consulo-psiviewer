@@ -5,6 +5,7 @@ import consulo.language.impl.DebugUtil;
 import consulo.language.psi.PsiFile;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.awt.CopyPasteManager;
 
 import java.awt.datatransfer.StringSelection;
@@ -15,8 +16,7 @@ import java.awt.datatransfer.StringSelection;
  * Date: 5/4/11
  * Time: 6:41 PM
  */
-public class PsiDump extends AnAction
-{
+public class PsiDump extends AnAction implements AnActionWithSyncUpdate {
   @Override
   public void actionPerformed(AnActionEvent e) {
     PsiFile pf = getFile(e);
